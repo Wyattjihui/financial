@@ -1,0 +1,13 @@
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  datasource:
+    url: jdbc:mysql://localhost:3306/manager?user=root&password=root
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQLDialect
+
+server:
+  context-path: /manager
+  port: 8081
