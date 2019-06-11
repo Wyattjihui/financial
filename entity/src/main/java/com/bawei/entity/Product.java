@@ -1,6 +1,7 @@
 package com.bawei.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import javax.persistence.Entity;
@@ -20,6 +21,7 @@ public class Product {
     /**
      * @see com.bawei.entity.enums.ProductStatus
      */
+    @ApiModelProperty(value = "状态",dataType = "com.bawei.entity.enums.ProductStatus")
     private String status;   //   状态 审核中：AUDINTING，销售中：IN_SELL，暂停销售：LOCKED，已结束：FINISHED,
     private String memo;   //  varch 备注,
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

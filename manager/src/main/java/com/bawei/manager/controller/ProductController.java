@@ -2,6 +2,7 @@ package com.bawei.manager.controller;
 
 import com.bawei.entity.Product;
 import com.bawei.manager.service.ProductService;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ public class ProductController {
     /**
      * 添加产品
      */
+    @ApiOperation(value = "创建产品",notes = "根据对应业务规则添加响应的产品")
     @RequestMapping(value = "",method = RequestMethod.POST)
     public Product addProduct(@RequestBody Product product){
         System.out.println("product+============="+product);
@@ -40,6 +42,7 @@ public class ProductController {
      * @param id
      * @return
      */
+    @ApiOperation(value = "查询单个产品",notes = "根据对应业务规则查询响应的产品")
     @RequestMapping(value = "/{id}",method = RequestMethod.GET)
     public Product findOne(@PathVariable String id){
        LOG.info("查询单个产品,id={}",id);
@@ -58,6 +61,7 @@ public class ProductController {
      * @param pageSize
      * @return
      */
+    @ApiOperation(value = "复杂查询",notes = "根据对应业务规则查询响应的产品")
     @RequestMapping(value = "",method = RequestMethod.GET)
     public Page<Product> query(String ids, BigDecimal minRewardRate,BigDecimal maxRewardRate,
                                String status,@RequestParam(defaultValue = "0")int pageNum,
