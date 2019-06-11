@@ -2,17 +2,22 @@ package com.bawei.manager.service;
 
 import com.bawei.entity.Product;
 import com.bawei.entity.enums.ProductStatus;
+import com.bawei.manager.error.ErrorEnum;
 import com.bawei.manager.repositories.ProductRepository;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import javax.persistence.criteria.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
-
+import java.util.List;
 
 @Service
 public class ProductService {
@@ -74,7 +79,7 @@ public class ProductService {
      * @param product
      */
     private void checkProduct(Product product) {
-        Assert.notNull(product.getId(),"数据id不可为空");
+        Assert.notNull(product.getId(),ErrorEnum.ID_NOT_NULL.getCode());
         Assert.notNull(product.getName(),"名称不可为空");
         Assert.notNull(product.getThresholdAmount(),"起投金额不可为空");
         Assert.notNull(product.getStepAmount(),"投资步长不可为空");
@@ -98,5 +103,39 @@ public class ProductService {
         Product result = repository.findOne(id);
         LOG.debug("查询单个产品,结果:{}",result);
         return result;
+    }
+
+    public Page<Product> query(List<String> idList, BigDecimal minRewardRate,
+                               BigDecimal maxRewardRate, List<String> statusList, Pageable pageable) {
+        LOG.debug("查询产品,idList={},minRewardRate={},maxRewardRate={},statusList={},pageable={}",
+                idList,minRewardRate,maxRewardRate,statusList,pageable);
+        Specification<Product> specification = new Specification<Product>() {
+            @Override
+            public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
+                Expression<String> idCol = root.get("id");
+                Expression<BigDecimal> rewardRateCol = root.get("rewardRate");
+                Expression<String> statusCol = root.get("status");
+                List<Predicate> predicates = new ArrayList<>();
+                if (idList!=null && idList.size()>0){
+                    predicates.add(idCol.in(idList));
+                }
+                if (minRewardRate!=null && BigDecimal.ZERO.compareTo(minRewardRate) < 0) {
+                    predicates.add(cb.ge(rewardRateCol, minRewardRate));
+                }
+                if (maxRewardRate!=null && BigDecimal.ZERO.compareTo(maxRewardRate) < 0) {
+                    predicates.add(cb.le(rewardRateCol, maxRewardRate));
+                }
+
+                if (statusList!=null && statusList.size()>0){
+                    predicates.add(statusCol.in(statusList));
+                }
+                criteriaQuery.where(predicates.toArray(new Predicate[0]));
+                return null;
+            }
+        };
+
+        Page<Product> page = repository.findAll(specification, pageable);
+        LOG.debug("查询产品，结果={}", page);
+        return page;
     }
 }
