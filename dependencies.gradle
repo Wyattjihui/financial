@@ -1,0 +1,40 @@
+ext{
+    version = [
+            springBootVersion: '1.5.4.RELEASE'
+    ]
+    libs = [
+            common: [
+                    "org.springframework.boot:spring-boot-starter-web:${version.springBootVersion}",
+                    "org.springframework.boot:spring-boot-starter-data-jpa:${version.springBootVersion}",
+                    "org.apache.commons:commons-lang3:3.5"
+            ],
+            mysql: [
+                    "mysql:mysql-connector-java:5.1.25"
+            ],
+            /*rpc框架*/
+            jsonrpc: [
+                    "com.github.briandilley.jsonrpc4j:jsonrpc4j:1.5.0"
+            ],
+            /*文档管理工具*/
+            swagger: [
+                    "io.springfox:springfox-swagger2:2.7.0",
+                    "io.springfox:springfox-swagger-ui:2.7.0"
+            ],
+            /*分布式缓存*/
+            hazelcast: [
+                    "com.hazelcast:hazelcast:3.8.6",
+                    "com.hazelcast:hazelcast-spring:3.8.6"
+            ],
+            /*非对称加密*/
+            rsa: [
+                    "commons-codec:commons-codec:1.8"
+            ],
+            /*消息中间件*/
+            activemq: [
+                    "org.springframework.boot:spring-boot-starter-activemq:${version.springBootVersion}"
+            ],
+            test:[
+                    "org.springframework.boot:spring-boot-starter-test:${version.springBootVersion}"
+            ]
+    ]
+}
