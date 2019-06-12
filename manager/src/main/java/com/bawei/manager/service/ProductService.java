@@ -105,6 +105,15 @@ public class ProductService {
         return result;
     }
 
+    /**
+     * 复杂查询
+     * @param idList
+     * @param minRewardRate
+     * @param maxRewardRate
+     * @param statusList
+     * @param pageable
+     * @return
+     */
     public Page<Product> query(List<String> idList, BigDecimal minRewardRate,
                                BigDecimal maxRewardRate, List<String> statusList, Pageable pageable) {
         LOG.debug("查询产品,idList={},minRewardRate={},maxRewardRate={},statusList={},pageable={}",
